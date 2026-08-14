@@ -66,14 +66,15 @@ class UIChannelDevice extends UIDevice {
         final UIButton scopeButton = new UIButton(0, 0, BANK_WIDTH - ADD_BUTTON_WIDTH - 2, 16) {
             @Override
             public void onMousePressed(processing.event.MouseEvent mouseEvent, float mx, float my) {
-                PatternScope.cycleScope();
+                int numBanks = channel.getBanks().size();
+                PatternScope.cycleScope(numBanks);
                 setLabel(PatternScope.getScopeLabel());
             }
         };
         scopeButton
             .setMomentary(true)
             .setLabel(PatternScope.getScopeLabel())
-            .setDescription("Toggle whether new effects/warps are added to the channel or to the focused pattern")
+            .setDescription("Cycle effect/warp scope: Channel → Pattern → Bank1 → Bank2 → ...")
             .addToContainer(this);
 
         // Add bank button (+)

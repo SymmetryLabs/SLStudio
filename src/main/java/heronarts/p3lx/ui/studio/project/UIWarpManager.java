@@ -70,13 +70,17 @@ public class UIWarpManager extends UIComponentManager {
             }
 
             if (instance != null) {
-                if (PatternScope.addToFocusedPattern && lx.engine.getFocusedChannel() instanceof LXChannel) {
+                if (lx.engine.getFocusedChannel() instanceof LXChannel) {
                     LXChannel ch = (LXChannel) lx.engine.getFocusedChannel();
-                    LXPattern focused = ch.getFocusedPattern();
-                    if (focused != null) {
-                        ch.addPatternWarp(focused, instance);
-                        instance.enabled.setValue(true);
-                        return;
+                    
+                    // Warps are only supported at pattern and channel level (not bank level)
+                    if (PatternScope.currentScope == PatternScope.EffectScope.PATTERN) {
+                        LXPattern focused = ch.getFocusedPattern();
+                        if (focused != null) {
+                            ch.addPatternWarp(focused, instance);
+                            instance.enabled.setValue(true);
+                            return;
+                        }
                     }
                 }
                 lx.engine.getFocusedChannel().addWarp(instance);

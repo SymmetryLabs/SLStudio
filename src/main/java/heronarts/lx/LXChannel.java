@@ -105,6 +105,15 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
         /** Fired when a pattern-scoped warp is reordered. */
         default void patternWarpMoved(LXChannel channel, LXPattern pattern, LXWarp warp) {}
+
+        /** Fired when a pattern bank is added. */
+        default void bankAdded(LXChannel channel, LXPatternBank bank) {}
+
+        /** Fired when a pattern bank is removed. */
+        default void bankRemoved(LXChannel channel, LXPatternBank bank) {}
+
+        /** Fired when a pattern bank is moved. */
+        default void bankMoved(LXChannel channel, LXPatternBank bank) {}
     }
 
     public interface MidiListener {
@@ -303,10 +312,22 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     /** Per-pattern warp chains. Warps in here are only applied when their key pattern is active. */
     private final Map<LXPattern, List<LXWarp>> patternWarps = new IdentityHashMap<>();
 
+    /** Pattern banks - each bank can run concurrently with its own active pattern */
+    private final List<LXPatternBank> mutableBanks = new ArrayList<>();
+    public final List<LXPatternBank> banks = Collections.unmodifiableList(mutableBanks);
+
+    /** Currently focused bank for UI operations */
+    public final DiscreteParameter focusedBank;
+
     /**
      * A local buffer used for transition blending and effects on this channel
      */
     private final PolyBuffer polyBuffer;
+
+    /**
+     * Blend mode for combining pattern bank outputs
+     */
+    private final heronarts.lx.blend.AddBlend bankBlend;
 
     private double autoCycleProgress = 0;
     private double transitionProgress = 0;
@@ -376,6 +397,17 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                 new DiscreteParameter("Focused Pattern", 0, Integer.max(patterns.length, 1))
                         .setDescription("Which pattern has focus in the UI");
 
+        this.focusedBank =
+                new DiscreteParameter("Focused Bank", 0, 1)
+                        .setDescription("Which pattern bank has focus in the UI");
+
+        this.focusedBank.addListener(p -> {
+            LXPatternBank focused = getFocusedBank();
+            if (focused != null) {
+                onBankPatternFocused(focused);
+            }
+        });
+
         this.blendMode = new ObjectParameter<LXBlend>("Blend", lx.engine.channelBlends)
                 .setDescription("Specifies the blending function used for the channel fader");
         this.patternBlendMode = new ObjectParameter<LXBlend>("Blending", lx.engine.channelBlends)
@@ -385,7 +417,18 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                 .setDescription("Specifies the blending function used for transitions between patterns on the channel");
 
         this.transitionMillis = lx.engine.nowMillis;
-        _updatePatterns(patterns);
+        
+        this.bankBlend = new heronarts.lx.blend.AddBlend(lx);
+        
+        LXPatternBank defaultBank = new LXPatternBank(lx, this, 0);
+        this.mutableBanks.add(defaultBank);
+        for (LXPattern pattern : patterns) {
+            defaultBank.addPattern(pattern);
+            // Also add to flat list for backward compatibility
+            this.mutablePatterns.add(pattern);
+        }
+        LXUtils.updateIndexes(this.mutablePatterns);
+        this.focusedPattern.setRange(Math.max(1, this.mutablePatterns.size()));
 
         this.autoCycleEnabled.addListener(p -> {
             if (((BooleanParameter) p).isOn()) {
@@ -570,6 +613,11 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             allPatterns.put(patternString, pattern);
         }
         System.out.println(patternString);
+
+        LXPatternBank targetBank = getFocusedBank();
+        if (targetBank != null) {
+            targetBank.addPattern(pattern);
+        }
 
         this.mutablePatterns.add(pattern);
         LXUtils.updateIndexes(mutablePatterns);
@@ -800,6 +848,85 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         }
     }
 
+    public LXChannel addBank() {
+        LXPatternBank bank = new LXPatternBank(this.lx, this, 0);
+        this.mutableBanks.add(bank);
+        LXUtils.updateIndexes(this.mutableBanks);
+        this.focusedBank.setRange(this.mutableBanks.size());
+        for (Listener listener : this.listeners) {
+            listener.bankAdded(this, bank);
+        }
+        return this;
+    }
+
+    public LXChannel removeBank(LXPatternBank bank) {
+        if (this.mutableBanks.size() <= 1) {
+            return this;
+        }
+        int index = this.mutableBanks.indexOf(bank);
+        if (index >= 0) {
+            this.mutableBanks.remove(index);
+            LXUtils.updateIndexes(this.mutableBanks);
+            this.focusedBank.setRange(Math.max(1, this.mutableBanks.size()));
+            int focusedBankIndex = this.focusedBank.getValuei();
+            if (focusedBankIndex >= this.mutableBanks.size()) {
+                this.focusedBank.setValue(this.mutableBanks.size() - 1);
+            }
+            for (Listener listener : this.listeners) {
+                listener.bankRemoved(this, bank);
+            }
+            bank.dispose();
+        }
+        return this;
+    }
+
+    public LXChannel moveBank(LXPatternBank bank, int index) {
+        this.mutableBanks.remove(bank);
+        this.mutableBanks.add(index, bank);
+        LXUtils.updateIndexes(this.mutableBanks);
+        for (Listener listener : this.listeners) {
+            listener.bankMoved(this, bank);
+        }
+        return this;
+    }
+
+    public LXPatternBank getFocusedBank() {
+        if (this.mutableBanks.isEmpty()) {
+            return null;
+        }
+        int index = this.focusedBank.getValuei();
+        if (index < 0 || index >= this.mutableBanks.size()) {
+            return null;
+        }
+        return this.mutableBanks.get(index);
+    }
+
+    /**
+     * Mirrors the focused bank's focused pattern onto this channel, so that the UI
+     * shows the parameters of the pattern selected within the focused bank.
+     */
+    void onBankPatternFocused(LXPatternBank bank) {
+        if (bank != getFocusedBank()) {
+            return;
+        }
+        LXPattern pattern = bank.getFocusedPattern();
+        if (pattern == null) {
+            return;
+        }
+        int index = this.mutablePatterns.indexOf(pattern);
+        if (index >= 0 && index < this.focusedPattern.getRange()) {
+            if (this.focusedPattern.getValuei() == index) {
+                this.focusedPattern.bang();
+            } else {
+                this.focusedPattern.setValue(index);
+            }
+        }
+    }
+
+    public List<LXPatternBank> getBanks() {
+        return this.banks;
+    }
+
     public final int getFocusedPatternIndex() {
         return this.focusedPattern.getValuei();
     }
@@ -1002,10 +1129,16 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         LXVector[] channelVectors = vectorArray;
         LXWarp channelVectorSource = vectorSource;
 
-        if (!blendPatterns.isOn()) {
-            loopNoPatternBlend(deltaMs, channelVectors, channelVectorSource);
-        } else {
-            loopWithPatternBlend(deltaMs, channelVectors, channelVectorSource);
+        // Run all pattern banks and blend their outputs
+        PolyBuffer.Space space = colorSpace.getEnum();
+        this.polyBuffer.setZero();
+        
+        for (LXPatternBank bank : this.mutableBanks) {
+            bank.loop(deltaMs);
+            // Blend each bank's output using ADD blend mode
+            if (bank.getActivePattern() != null) {
+                this.bankBlend.blend(this.polyBuffer, bank.getPolyBuffer(), 1.0, this.polyBuffer, space);
+            }
         }
 
         // Restore channel vectors so channel-level effects see the channel chain output,
@@ -1192,13 +1325,23 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     private static final String KEY_PATTERN_INDEX = "patternIndex";
     private static final String KEY_PATTERN_EFFECTS = "patternEffects";
     private static final String KEY_PATTERN_WARPS = "patternWarps";
+    private static final String KEY_BANKS = "banks";
 
     @Override
     public void save(LX lx, JsonObject obj) {
         super.save(lx, obj);
+        
+        // Save pattern banks
+        JsonArray banksArr = new JsonArray();
+        for (LXPatternBank bank : this.mutableBanks) {
+            JsonObject bankObj = new JsonObject();
+            bank.save(lx, bankObj);
+            banksArr.add(bankObj);
+        }
+        obj.add(KEY_BANKS, banksArr);
+        
+        // Legacy: also save flat pattern list for backward compatibility
         obj.addProperty(KEY_PATTERN_INDEX, this.activePatternIndex);
-        // Patch each pattern's JSON with its per-pattern effect/warp chains so
-        // they're saved alongside the pattern (and loaded together).
         JsonArray patternsArr = new JsonArray();
         for (LXPattern p : this.mutablePatterns) {
             JsonObject pObj = new JsonObject();
@@ -1218,63 +1361,114 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
     @Override
     public void load(LX lx, JsonObject obj) {
-        // Remove patterns
-        for (int i = this.mutablePatterns.size() - 1; i >= 0; --i) {
-            removePattern(this.mutablePatterns.get(i));
+        // Remove all existing banks (bypasses removeBank(), which keeps a minimum of one)
+        for (int i = this.mutableBanks.size() - 1; i >= 0; --i) {
+            LXPatternBank bank = this.mutableBanks.remove(i);
+            for (Listener listener : this.listeners) {
+                listener.bankRemoved(this, bank);
+            }
+            bank.dispose();
         }
 
-        // Add patterns
-        JsonArray patternsArray = obj.getAsJsonArray(KEY_PATTERNS);
-        for (JsonElement patternElement : patternsArray) {
-            JsonObject patternObj = (JsonObject) patternElement;
-            LXPattern pattern = this.lx.instantiatePattern(patternObj.get(KEY_CLASS).getAsString());
-            if (pattern != null) {
-                pattern.load(lx, patternObj);
-                addPattern(pattern);
+        // Tear down the flat pattern list, notifying listeners so that any UI
+        // built for these patterns (e.g. device panels) is discarded.
+        List<LXPattern> priorPatterns = new ArrayList<>(this.mutablePatterns);
+        this.mutablePatterns.clear();
+        for (LXPattern pattern : priorPatterns) {
+            for (Listener listener : new ArrayList<>(this.listeners)) {
+                listener.patternRemoved(this, pattern);
+            }
+        }
+        
+        // Load banks if present (new format)
+        if (obj.has(KEY_BANKS)) {
+            JsonArray banksArray = obj.getAsJsonArray(KEY_BANKS);
+            for (JsonElement bankElement : banksArray) {
+                JsonObject bankObj = (JsonObject) bankElement;
+                LXPatternBank bank = new LXPatternBank(lx, this, this.mutableBanks.size());
+                bank.load(lx, bankObj);
+                this.mutableBanks.add(bank);
+                // Fire listener so UI updates
+                for (Listener listener : this.listeners) {
+                    listener.bankAdded(this, bank);
+                }
+            }
+            LXUtils.updateIndexes(this.mutableBanks);
+            this.focusedBank.setRange(Math.max(1, this.mutableBanks.size()));
+        } else if (obj.has(KEY_PATTERNS)) {
+            // Legacy format: load patterns into default bank
+            LXPatternBank defaultBank = new LXPatternBank(lx, this, 0);
+            this.mutableBanks.add(defaultBank);
 
-                // Restore per-pattern effects
-                if (patternObj.has(KEY_PATTERN_EFFECTS)) {
-                    for (JsonElement el : patternObj.getAsJsonArray(KEY_PATTERN_EFFECTS)) {
-                        JsonObject eObj = (JsonObject) el;
-                        LXEffect e = this.lx.instantiateEffect(eObj.get("class").getAsString());
-                        if (e != null) {
-                            e.load(lx, eObj);
-                            addPatternEffect(pattern, e);
+            JsonArray patternsArray = obj.getAsJsonArray(KEY_PATTERNS);
+            for (JsonElement patternElement : patternsArray) {
+                JsonObject patternObj = (JsonObject) patternElement;
+                LXPattern pattern = this.lx.instantiatePattern(patternObj.get(KEY_CLASS).getAsString());
+                if (pattern != null) {
+                    pattern.load(lx, patternObj);
+                    defaultBank.addPattern(pattern);
+
+                    // Restore per-pattern effects
+                    if (patternObj.has(KEY_PATTERN_EFFECTS)) {
+                        for (JsonElement el : patternObj.getAsJsonArray(KEY_PATTERN_EFFECTS)) {
+                            JsonObject eObj = (JsonObject) el;
+                            LXEffect e = this.lx.instantiateEffect(eObj.get("class").getAsString());
+                            if (e != null) {
+                                e.load(lx, eObj);
+                                defaultBank.addPatternEffect(pattern, e);
+                            }
+                        }
+                    }
+                    // Restore per-pattern warps
+                    if (patternObj.has(KEY_PATTERN_WARPS)) {
+                        for (JsonElement el : patternObj.getAsJsonArray(KEY_PATTERN_WARPS)) {
+                            JsonObject wObj = (JsonObject) el;
+                            LXWarp w = this.lx.instantiateWarp(wObj.get("class").getAsString());
+                            if (w != null) {
+                                w.load(lx, wObj);
+                                defaultBank.addPatternWarp(pattern, w);
+                            }
                         }
                     }
                 }
-                // Restore per-pattern warps
-                if (patternObj.has(KEY_PATTERN_WARPS)) {
-                    for (JsonElement el : patternObj.getAsJsonArray(KEY_PATTERN_WARPS)) {
-                        JsonObject wObj = (JsonObject) el;
-                        LXWarp w = this.lx.instantiateWarp(wObj.get("class").getAsString());
-                        if (w != null) {
-                            w.load(lx, wObj);
-                            addPatternWarp(pattern, w);
-                        }
-                    }
+            }
+            
+            // Set the active index for legacy format
+            if (obj.has(KEY_PATTERN_INDEX)) {
+                int patternIndex = obj.get(KEY_PATTERN_INDEX).getAsInt();
+                if (patternIndex < defaultBank.patterns.size()) {
+                    defaultBank.goIndex(patternIndex);
                 }
             }
-        }
 
-        // Set the active index instantly, do not transition!
-        this.activePatternIndex = this.nextPatternIndex = 0;
-        if (obj.has(KEY_PATTERN_INDEX)) {
-            int patternIndex = obj.get(KEY_PATTERN_INDEX).getAsInt();
-            if (patternIndex < this.patterns.size()) {
-                this.activePatternIndex = this.nextPatternIndex = patternIndex;
-            }
-        }
-        LXPattern activePattern = getActivePattern();
-        if (activePattern != null) {
-            activePattern.onActive();
-            for (Listener listener : listeners) {
-                listener.patternDidChange(this, activePattern);
+            LXUtils.updateIndexes(this.mutableBanks);
+            this.focusedBank.setRange(Math.max(1, this.mutableBanks.size()));
+            // Fire listener now that the bank is fully populated
+            for (Listener listener : this.listeners) {
+                listener.bankAdded(this, defaultBank);
             }
         }
 
-        // Set the focused pattern to the active one
-        this.focusedPattern.setValue(this.activePatternIndex);
+        // Rebuild flat pattern list for backward compatibility
+        this.mutablePatterns.clear();
+        for (LXPatternBank bank : this.mutableBanks) {
+            this.mutablePatterns.addAll(bank.patterns);
+        }
+        LXUtils.updateIndexes(this.mutablePatterns);
+        this.focusedPattern.setRange(Math.max(1, this.mutablePatterns.size()));
+
+        // Patterns were added straight into their banks, so channel listeners have
+        // not seen them yet. Announce them now that the flat list is in place.
+        for (LXPattern pattern : new ArrayList<>(this.mutablePatterns)) {
+            for (Listener listener : new ArrayList<>(this.listeners)) {
+                listener.patternAdded(this, pattern);
+            }
+        }
+
+        LXPatternBank focused = getFocusedBank();
+        if (focused != null) {
+            onBankPatternFocused(focused);
+        }
 
         super.load(lx, obj);
     }

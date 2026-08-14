@@ -28,6 +28,7 @@ import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
+import heronarts.lx.LXPatternBank;
 import heronarts.p3lx.P3LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIItemList;
@@ -98,12 +99,31 @@ public class UIEffectManager extends UIComponentManager {
             }
 
             if (instance != null) {
-                if (PatternScope.addToFocusedPattern && lx.engine.getFocusedChannel() instanceof LXChannel) {
+                if (lx.engine.getFocusedChannel() instanceof LXChannel) {
                     LXChannel ch = (LXChannel) lx.engine.getFocusedChannel();
-                    LXPattern focused = ch.getFocusedPattern();
-                    if (focused != null) {
-                        ch.addPatternEffect(focused, instance);
-                        return;
+                    
+                    switch (PatternScope.currentScope) {
+                        case PATTERN:
+                            LXPattern focused = ch.getFocusedPattern();
+                            if (focused != null) {
+                                ch.addPatternEffect(focused, instance);
+                                return;
+                            }
+                            break;
+                        case BANK:
+                            int bankIndex = PatternScope.targetBankIndex;
+                            if (bankIndex < 0) {
+                                bankIndex = ch.focusedBank.getValuei();
+                            }
+                            if (bankIndex >= 0 && bankIndex < ch.getBanks().size()) {
+                                LXPatternBank bank = ch.getBanks().get(bankIndex);
+                                bank.addBankEffect(instance);
+                                return;
+                            }
+                            break;
+                        case CHANNEL:
+                        default:
+                            break;
                     }
                 }
                 lx.engine.getFocusedChannel().addEffect(instance);
