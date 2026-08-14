@@ -1,7 +1,7 @@
 /**
  * Shared UI flag that controls where "add effect/warp" actions in the
  * effect/warp managers attach the new component.
- * Supports: Channel → Pattern → Bank1 → Bank2 → ...
+ * Supports: Channel → Pattern
  */
 package heronarts.p3lx.ui.studio;
 
@@ -14,7 +14,7 @@ public class PatternScope {
 
     /**
      * Current scope for adding effects/warps.
-     * Cycles: Channel → Pattern → Bank (for each bank in channel)
+     * Cycles: Channel → Pattern
      */
     public static volatile EffectScope currentScope = EffectScope.CHANNEL;
 
@@ -41,9 +41,6 @@ public class PatternScope {
             case PATTERN:
                 return "Effect: Pattern";
             case BANK:
-                if (targetBankIndex >= 0) {
-                    return "Effect: Bank " + (targetBankIndex + 1);
-                }
                 return "Effect: Bank";
             default:
                 return "Effect: Channel";
@@ -51,38 +48,16 @@ public class PatternScope {
     }
 
     /**
-     * Cycle to the next scope. Order: Channel → Pattern → Bank1 → Bank2 → ... → Channel
-     * @param numBanks Total number of banks in the focused channel
+     * Cycle to the next scope. Order: Channel → Pattern → Channel
      */
-    public static void cycleScope(int numBanks) {
-        switch (currentScope) {
-            case CHANNEL:
-                currentScope = EffectScope.PATTERN;
-                targetBankIndex = -1;
-                addToFocusedPattern = true;
-                break;
-            case PATTERN:
-                if (numBanks > 0) {
-                    currentScope = EffectScope.BANK;
-                    targetBankIndex = 0;
-                    addToFocusedPattern = false;
-                } else {
-                    currentScope = EffectScope.CHANNEL;
-                    targetBankIndex = -1;
-                    addToFocusedPattern = false;
-                }
-                break;
-            case BANK:
-                if (targetBankIndex + 1 >= numBanks) {
-                    // Wrap back to channel
-                    currentScope = EffectScope.CHANNEL;
-                    targetBankIndex = -1;
-                    addToFocusedPattern = false;
-                } else {
-                    // Move to next bank
-                    targetBankIndex++;
-                }
-                break;
+    public static void cycleScope() {
+        targetBankIndex = -1;
+        if (currentScope == EffectScope.CHANNEL) {
+            currentScope = EffectScope.PATTERN;
+            addToFocusedPattern = true;
+        } else {
+            currentScope = EffectScope.CHANNEL;
+            addToFocusedPattern = false;
         }
     }
 }
