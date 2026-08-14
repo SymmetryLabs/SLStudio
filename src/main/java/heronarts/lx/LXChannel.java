@@ -324,10 +324,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
      */
     private final PolyBuffer polyBuffer;
 
-    /**
-     * Blend mode for combining pattern bank outputs
-     */
-    private final heronarts.lx.blend.AddBlend bankBlend;
+
 
     private double autoCycleProgress = 0;
     private double transitionProgress = 0;
@@ -417,8 +414,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                 .setDescription("Specifies the blending function used for transitions between patterns on the channel");
 
         this.transitionMillis = lx.engine.nowMillis;
-        
-        this.bankBlend = new heronarts.lx.blend.AddBlend(lx);
         
         LXPatternBank defaultBank = new LXPatternBank(lx, this, 0);
         this.mutableBanks.add(defaultBank);
@@ -1133,11 +1128,18 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         PolyBuffer.Space space = colorSpace.getEnum();
         this.polyBuffer.setZero();
         
-        for (LXPatternBank bank : this.mutableBanks) {
+        for (int i = 0; i < this.mutableBanks.size(); i++) {
+            LXPatternBank bank = this.mutableBanks.get(i);
             bank.loop(deltaMs);
-            // Blend each bank's output using ADD blend mode
             if (bank.getActivePattern() != null) {
-                this.bankBlend.blend(this.polyBuffer, bank.getPolyBuffer(), 1.0, this.polyBuffer, space);
+                if (i == 0) {
+                    // First bank: copy directly into channel buffer
+                    this.polyBuffer.copyFrom(bank.getPolyBuffer(), space);
+                } else {
+                    // Additional banks: blend using the bank's selected blend mode
+                    LXBlend blend = bank.getBankBlend();
+                    blend.blend(this.polyBuffer, bank.getPolyBuffer(), 1.0, this.polyBuffer, space);
+                }
             }
         }
 

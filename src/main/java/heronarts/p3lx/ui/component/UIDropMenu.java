@@ -33,6 +33,7 @@ import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UIControlTarget;
 import heronarts.p3lx.ui.UIFocus;
+import heronarts.p3lx.ui.UITimerTask;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
@@ -62,6 +63,18 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, UIControlTarge
         this.closedY = y;
         this.closedHeight = h;
         setParameter(parameter);
+
+        // Safety net: collapse the dropdown if it lost focus but is still expanded.
+        // This handles edge cases where the expanded menu extends outside its parent's
+        // bounds and clicks in that area are never dispatched back to the menu.
+        addLoopTask(new UITimerTask(10, UITimerTask.Mode.FPS) {
+            @Override
+            public void run() {
+                if (expanded && !hasFocus()) {
+                    setExpanded(false);
+                }
+            }
+        });
     }
 
     @Override
@@ -184,6 +197,8 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, UIControlTarge
                     setPosition(this.x, this.closedY - this.closedHeight * this.parameter.getRange());
                 }
                 setSize(this.width, this.closedHeight * (this.parameter.getRange() + 1));
+                // Bring to front so expanded options render above sibling components
+                bringToFront();
             } else {
                 setPosition(this.x, this.closedY);
                 setSize(this.width, this.closedHeight);

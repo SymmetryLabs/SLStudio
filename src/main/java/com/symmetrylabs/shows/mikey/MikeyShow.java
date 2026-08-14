@@ -33,7 +33,7 @@ public class MikeyShow implements Show {
     @Override
     public void setupLx(LX lx) {
         MikeyModel model = (MikeyModel) lx.model;
-        MikeyPixlite pixlite = new MikeyPixlite(lx, "192.168.1.50", model);
+        MikeyPixlite pixlite = new MikeyPixlite(lx, "169.254.25.250", model);
         lx.addOutput(pixlite);
         // Dedicated ADD-blend channel: always runs, adds white on top when a strip is selected
         illumChannel = lx.engine.addChannel();

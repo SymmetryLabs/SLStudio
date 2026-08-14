@@ -46,6 +46,7 @@ public class UIPatternBank extends UI2dContainer {
 
     private static final int BANK_WIDTH = 140;
     private static final int HEADER_HEIGHT = 16;
+    private static final int BLEND_DROPDOWN_HEIGHT = 16;
     private static final int FOOTER_HEIGHT = 36;
     
     private final UI ui;
@@ -63,8 +64,18 @@ public class UIPatternBank extends UI2dContainer {
         this.bank = bank;
         setBorderColor(ui.theme.getDeviceBorderColor());
 
+        // Blend mode dropdown for non-primary banks (shown above the header)
+        float topOffset = 0;
+        if (bank.getIndex() > 0) {
+            new UIDropMenu(0, 0, BANK_WIDTH, BLEND_DROPDOWN_HEIGHT, bank.bankBlendMode)
+                .setDirection(UIDropMenu.Direction.DOWN)
+                .setDescription("Blend mode for compositing this bank onto the channel")
+                .addToContainer(this);
+            topOffset = BLEND_DROPDOWN_HEIGHT;
+        }
+
         // Bank header/title
-        this.headerLabel = new UILabel(0, 0, BANK_WIDTH, HEADER_HEIGHT);
+        this.headerLabel = new UILabel(0, topOffset, BANK_WIDTH, HEADER_HEIGHT);
         this.headerLabel.setLabel(bank.getLabel());
         this.headerLabel.setTextAlignment(PConstants.CENTER, PConstants.CENTER);
         this.headerLabel.addToContainer(this);
@@ -72,7 +83,8 @@ public class UIPatternBank extends UI2dContainer {
         updateSelectedStyle();
 
         // Pattern list
-        this.patternList = new UIBankPatternList(ui, 0, HEADER_HEIGHT, BANK_WIDTH, h - HEADER_HEIGHT - FOOTER_HEIGHT, bank);
+        float listTop = topOffset + HEADER_HEIGHT;
+        this.patternList = new UIBankPatternList(ui, 0, listTop, BANK_WIDTH, h - listTop - FOOTER_HEIGHT, bank);
         this.patternList.addToContainer(this);
 
         // Transition controls
@@ -120,7 +132,8 @@ public class UIPatternBank extends UI2dContainer {
     @Override
     public void onMousePressed(processing.event.MouseEvent mouseEvent, float mx, float my) {
         super.onMousePressed(mouseEvent, mx, my);
-        if (my < HEADER_HEIGHT && this.selectListener != null) {
+        float headerTop = (bank.getIndex() > 0) ? BLEND_DROPDOWN_HEIGHT : 0;
+        if (my >= headerTop && my < headerTop + HEADER_HEIGHT && this.selectListener != null) {
             this.selectListener.run();
         }
     }

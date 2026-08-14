@@ -113,6 +113,12 @@ public class LXPatternBank extends LXModulatorComponent implements LXComponent.R
 
     public final ObjectParameter<LXBlend> transitionBlendMode;
 
+    /**
+     * Blend mode used when compositing this bank's output onto the channel.
+     * Only meaningful for banks after the first (index > 0).
+     */
+    public final ObjectParameter<LXBlend> bankBlendMode;
+
     private final PolyBuffer polyBuffer;
 
     private double autoCycleProgress = 0;
@@ -135,6 +141,9 @@ public class LXPatternBank extends LXModulatorComponent implements LXComponent.R
         this.transitionBlendMode = new ObjectParameter<>("Trans Blend", lx.engine.crossfaderBlends)
                 .setDescription("Specifies the blending function used for transitions between patterns in the bank");
 
+        this.bankBlendMode = new ObjectParameter<>("Bank Blend", lx.engine.channelBlends)
+                .setDescription("Specifies the blending function used to composite this bank onto the channel");
+
         this.transitionMillis = lx.engine.nowMillis;
 
         addParameter("autoCycleEnabled", this.autoCycleEnabled);
@@ -142,6 +151,7 @@ public class LXPatternBank extends LXModulatorComponent implements LXComponent.R
         addParameter("transitionEnabled", this.transitionEnabled);
         addParameter("transitionTimeSecs", this.transitionTimeSecs);
         addParameter("transitionBlendMode", this.transitionBlendMode);
+        addParameter("bankBlendMode", this.bankBlendMode);
 
         this.focusedPattern.addListener(p -> this.channel.onBankPatternFocused(this));
     }
@@ -483,6 +493,13 @@ public class LXPatternBank extends LXModulatorComponent implements LXComponent.R
 
     public PolyBuffer getPolyBuffer() {
         return this.polyBuffer;
+    }
+
+    /**
+     * Returns the blend instance to use when compositing this bank onto the channel output.
+     */
+    public LXBlend getBankBlend() {
+        return this.channel.lx.engine.channelBlends[this.bankBlendMode.getValuei()];
     }
 
     private void runPatternScoped(LXPattern pat, double deltaMs, PolyBuffer.Space space,
