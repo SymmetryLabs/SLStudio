@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "timestamp": 1786051761750,
+  "timestamp": 1787164047113,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
     "modulationColor": -16711913,
     "parameters": {
       "label": "Engine",
-      "speed": 1.059999942779541,
+      "speed": 1.0199999809265137,
       "multithreaded": true,
       "channelMultithreaded": true,
       "networkMultithreaded": true
@@ -20,10 +20,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color": -9633537,
-        "color/hue": 265.6600034236908,
+        "color": -1,
+        "color/hue": 0.0,
         "color/brightness": 100.0,
-        "color/saturation": 100.0,
+        "color/saturation": 0.0,
         "period": 1000.0,
         "range": 0.0,
         "spread": 360.0,
@@ -66,7 +66,7 @@
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
               "autoDisable": true,
-              "speed": 0.7716535433070866,
+              "speed": 0.8503937007874016,
               "editorVisible": true,
               "patternBlendMode": 0,
               "blendPatterns": false
@@ -203,7 +203,7 @@
                 }
               }
             ],
-            "patternIndex": 0,
+            "patternIndex": 1,
             "patterns": [
               {
                 "id": 697,
@@ -478,7 +478,7 @@
                 }
               }
             ],
-            "patternIndex": 0,
+            "patternIndex": 4,
             "patterns": [
               {
                 "id": 2179,
@@ -757,7 +757,7 @@
                 }
               }
             ],
-            "patternIndex": 2,
+            "patternIndex": 4,
             "patterns": [
               {
                 "id": 811,
@@ -2594,7 +2594,7 @@
               "transitionTimeSecs": 0.1,
               "transitionBlendMode": 0,
               "autoDisable": true,
-              "speed": 1.059999942779541,
+              "speed": 1.0199999809265137,
               "editorVisible": false,
               "patternBlendMode": 0,
               "blendPatterns": false
@@ -2660,7 +2660,7 @@
                 "parameters": {
                   "label": "GlobalColorPalette",
                   "expandedInUi": true,
-                  "enabled": true
+                  "enabled": false
                 },
                 "modulation": {
                   "modulators": [],
@@ -2768,7 +2768,7 @@
                 }
               }
             ],
-            "patternIndex": 36,
+            "patternIndex": 13,
             "patterns": [
               {
                 "id": 1591,
@@ -2781,16 +2781,16 @@
                   "Cycle": false,
                   "Hue": 360.0,
                   "Spark": 0.0,
-                  "Wave": 0.2992125984251969,
+                  "Wave": 0.0,
                   "xPos": 1.0,
                   "yPos": 0.25984251968503935,
-                  "X-SYM": true,
-                  "Y-SYM": true,
-                  "R-SYM": true,
+                  "X-SYM": false,
+                  "Y-SYM": false,
+                  "R-SYM": false,
                   "X-DUP": false,
                   "JOG": false,
                   "GREY": false,
-                  "Thick": 0.1560000002384186,
+                  "Thick": 0.1,
                   "Number": 0
                 },
                 "modulation": {
@@ -2846,8 +2846,8 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": false,
-                  "palette": 32,
-                  "speed": 460.00001206994057,
+                  "palette": 0,
+                  "speed": -1000.0,
                   "width": 105.33094024658203,
                   "wipeOut": true,
                   "refill": true,
@@ -2860,7 +2860,7 @@
                   "triggers": []
                 },
                 "autoCycleEnabled": false,
-                "paletteName": "sun1",
+                "paletteName": "astro1",
                 "patternEffects": [
                   {
                     "id": 35315,
@@ -2893,8 +2893,8 @@
                   "Enabled": true,
                   "Cycle": false,
                   "Hue": 0.4,
-                  "Speed": 0.03999999910593033,
-                  "Crazy": 0.20000000298023224
+                  "Speed": 0.0,
+                  "Crazy": 0.0
                 },
                 "modulation": {
                   "modulators": [],
@@ -2948,14 +2948,14 @@
                   "label": "Blinders",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "Cycle": true
+                  "Cycle": false
                 },
                 "modulation": {
                   "modulators": [],
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true,
+                "autoCycleEnabled": false,
                 "patternEffects": [
                   {
                     "id": 35325,
@@ -2986,7 +2986,7 @@
                   "Cycle": false,
                   "Clr": 0.5,
                   "Gain": 0.0,
-                  "Range": 0.2,
+                  "Range": 0.0,
                   "Attk": 0.4,
                   "Rls": 0.4,
                   "Slope": 0.5
@@ -3215,7 +3215,7 @@
                   "everywhere": true,
                   "timeScale": 0.0,
                   "size": 0.0,
-                  "detail": 2.0,
+                  "detail": 0.0,
                   "ripple": 0.6,
                   "x": 421.0,
                   "y": 23.25,
@@ -3473,8 +3473,8 @@
                   "atBlobs": false,
                   "nearBlobs": false,
                   "everywhere": true,
-                  "timeScale": 0.15,
-                  "size": 560.0,
+                  "timeScale": 0.0,
+                  "size": 0.0,
                   "detail": 6.6,
                   "ripple": 0.4,
                   "x": 421.0,
@@ -3538,8 +3538,8 @@
                   "atBlobs": false,
                   "nearBlobs": false,
                   "everywhere": true,
-                  "timeScale": 0.15,
-                  "size": 560.0,
+                  "timeScale": 0.0,
+                  "size": 0.0,
                   "detail": 4.4,
                   "ripple": -3.6,
                   "x": 421.0,
@@ -3582,8 +3582,8 @@
                   "atBlobs": false,
                   "nearBlobs": false,
                   "everywhere": true,
-                  "timeScale": 0.35,
-                  "size": 560.0,
+                  "timeScale": 0.0,
+                  "size": 0.0,
                   "detail": 6.6,
                   "ripple": 0.6,
                   "x": 421.0,
@@ -3650,7 +3650,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": false,
-                  "count": 203.99999991059303,
+                  "count": 0.0,
                   "size": 88.0000002682209,
                   "edgeCut": 0.85,
                   "peakCut": 1.0,
@@ -3730,7 +3730,7 @@
                   "X-DUP": false,
                   "JOG": false,
                   "GREY": false,
-                  "Speed": 0.55,
+                  "Speed": -2.0,
                   "Symm": 0,
                   "Anim": 7,
                   "Dens": 0.8599999941885471,
@@ -3789,7 +3789,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": false,
-                  "Hue": 32.399999275803566,
+                  "Hue": 0.0,
                   "Spark": 0.0,
                   "Wave": 0.0,
                   "xPos": 0.5,
@@ -3797,7 +3797,7 @@
                   "xRot": 0.5,
                   "yRot": 0.5,
                   "zRot": 0.5,
-                  "Spin": 0.5,
+                  "Spin": 0.0,
                   "X-SYM": false,
                   "Y-SYM": false,
                   "R-SYM": false,
@@ -4226,8 +4226,8 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": false,
-                  "color": -16122021,
-                  "color/hue": 139.99998474121094,
+                  "color": -63219,
+                  "color/hue": 359.0,
                   "color/brightness": 100.0,
                   "color/saturation": 96.47058868408203
                 },
@@ -4478,7 +4478,7 @@
                   "label": "Gradient",
                   "expandedInUi": true,
                   "Enabled": true,
-                  "Cycle": true,
+                  "Cycle": false,
                   "Color": -1,
                   "Color/hue": 0.0,
                   "Color/brightness": 100.0,
@@ -4489,7 +4489,7 @@
                   "modulations": [],
                   "triggers": []
                 },
-                "autoCycleEnabled": true,
+                "autoCycleEnabled": false,
                 "patternEffects": [
                   {
                     "id": 62303,
@@ -4819,7 +4819,7 @@
                 }
               }
             ],
-            "patternIndex": 17,
+            "patternIndex": 0,
             "patterns": [
               {
                 "id": 45344,
@@ -7078,13 +7078,13 @@
             "modulationColor": -5439744,
             "parameters": {
               "label": "StripIllum",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -7476,13 +7476,13 @@
             "modulationColor": -7936,
             "parameters": {
               "label": "NordKeys",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": true,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 60.0,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -7514,7 +7514,7 @@
               }
             ],
             "effects": [],
-            "patternIndex": 7,
+            "patternIndex": 0,
             "patterns": [
               {
                 "id": 48231,
@@ -8113,7 +8113,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16711894,
+          "modulationColor": -16711827,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -8142,7 +8142,26 @@
         "label": "Master"
       },
       "warps": [],
-      "effects": []
+      "effects": [
+        {
+          "id": 64805,
+          "class": "com.symmetrylabs.slstudio.effect.RGBScale",
+          "modulationColor": -9764609,
+          "parameters": {
+            "label": "RGBScale",
+            "expandedInUi": true,
+            "enabled": true,
+            "rScale": 1.0000000149011612,
+            "gScale": 1.0000000149011612,
+            "bScale": 1.0000000149011612
+          },
+          "modulation": {
+            "modulators": [],
+            "modulations": [],
+            "triggers": []
+          }
+        }
+      ]
     },
     "tempo": {
       "id": 26,
@@ -8150,8 +8169,8 @@
       "modulationColor": -16711887,
       "parameters": {
         "label": "",
-        "period": 550.968791,
-        "bpm": 108.89909007568453,
+        "period": 2203.875164,
+        "bpm": 27.22477251892113,
         "tap": false,
         "nudgeUp": false,
         "nudgeDown": false,
@@ -8184,16 +8203,16 @@
           "slope": 4.5,
           "Band-1": 0.0,
           "Band-2": 0.0,
-          "Band-3": 0.0,
-          "Band-4": 0.009403315174110638,
-          "Band-5": 0.0703022064723745,
-          "Band-6": 0.14619698828183314,
-          "Band-7": 0.31053040729351544,
-          "Band-8": 0.32400577824468024,
-          "Band-9": 0.20786401411144795,
-          "Band-10": 0.11694561961031447,
-          "Band-11": 0.05188310199101187,
-          "Band-12": 0.045437109899204686,
+          "Band-3": 0.08244597296423917,
+          "Band-4": 0.18052581266301548,
+          "Band-5": 0.17097182140407263,
+          "Band-6": 0.1246209768547889,
+          "Band-7": 0.30123504027552783,
+          "Band-8": 0.3147979556174839,
+          "Band-9": 0.16489382064735825,
+          "Band-10": 0.08321214818062295,
+          "Band-11": 0.06412491062661851,
+          "Band-12": 0.06548469382860667,
           "Band-13": 0.0,
           "Band-14": 0.0,
           "Band-15": 0.0,
@@ -8252,7 +8271,7 @@
       "DMXParameterMapper": {
         "id": 48,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -16741633,
+        "modulationColor": -8448,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -9974,49 +9993,49 @@
           "type": "CONTROL_CHANGE",
           "componentId": 708,
           "parameterPath": "speed",
-          "cc": 48
+          "cc": 49
         },
         {
           "channel": 0,
           "type": "CONTROL_CHANGE",
           "componentId": 810,
           "parameterPath": "speed",
-          "cc": 48
+          "cc": 50
         },
         {
           "channel": 0,
           "type": "CONTROL_CHANGE",
           "componentId": 821,
           "parameterPath": "speed",
-          "cc": 48
+          "cc": 51
         },
         {
           "channel": 0,
           "type": "CONTROL_CHANGE",
           "componentId": 834,
           "parameterPath": "speed",
-          "cc": 48
+          "cc": 52
         },
         {
           "channel": 0,
           "type": "CONTROL_CHANGE",
           "componentId": 857,
           "parameterPath": "speed",
-          "cc": 48
+          "cc": 53
         },
         {
           "channel": 0,
           "type": "CONTROL_CHANGE",
           "componentId": 874,
           "parameterPath": "speed",
-          "cc": 48
+          "cc": 54
         },
         {
           "channel": 0,
           "type": "CONTROL_CHANGE",
           "componentId": 1099,
           "parameterPath": "speed",
-          "cc": 48
+          "cc": 55
         },
         {
           "channel": 0,
@@ -10200,10 +10219,10 @@
         "positionX": 0.0,
         "positionY": 3359.308349609375,
         "positionZ": -39.570770263671875,
-        "orientW": -0.5040719,
-        "orientX": -0.727655,
-        "orientY": 0.29386148,
-        "orientZ": 0.3606595
+        "orientW": -0.5263444,
+        "orientX": -0.73964965,
+        "orientY": 0.3530557,
+        "orientZ": 0.22634438
       }
     }
   }

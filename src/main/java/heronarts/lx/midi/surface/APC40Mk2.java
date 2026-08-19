@@ -63,7 +63,6 @@ public class APC40Mk2 extends LXMidiSurface {
     public static final int MASTER_FADER = 14;
     public static final int CROSSFADER = 15;
     public static final int CUE_LEVEL = 47;
-    public static final int GLOBAL_SPEED = 48;
 
     public static final int DEVICE_KNOB = 16;
     public static final int DEVICE_KNOB_NUM = 8;
@@ -954,7 +953,10 @@ public class APC40Mk2 extends LXMidiSurface {
         }
 
         if (number >= CHANNEL_KNOB && number <= CHANNEL_KNOB_MAX) {
-            sendControlChange(cc.getChannel(), cc.getCC(), cc.getValue());
+            int chan = number - CHANNEL_KNOB;
+            if (chan < getVisibleChannelList().size()) {
+                getVisibleChannelList().get(chan).speed.setNormalized(cc.getNormalized());
+            }
             return;
         }
 
