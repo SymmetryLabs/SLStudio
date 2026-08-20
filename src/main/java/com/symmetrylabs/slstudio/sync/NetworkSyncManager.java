@@ -42,16 +42,12 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     public static final int SYNC_HEARTBEAT_INTERVAL_MS = 2000;  // Re-send current pattern every 2 seconds
     public static final int CONNECTION_TIMEOUT_MS = 10000;  // 10 seconds (5x heartbeat for robustness)
     
-    // Wi-Fi interface to use for sync. On macOS the device name varies (en0, en1, etc.)
-    // so we detect it by display name first, then fall back to common device names.
-    private static final String[] WIFI_INTERFACE_FALLBACKS = { "en0", "en1" };
-    
     private final LX lx;
     private final NetworkMonitor networkMonitor;
     private final LXOscEngine oscEngine;
     private DatagramSocket discoverySocket;
     private final LXOscEngine.Receiver oscReceiver;
-    private final LXOscEngine.Transmitter oscTransmitter;
+    private final List<LXOscEngine.Transmitter> oscTransmitters = new ArrayList<>();
     
     // Sync state
     public final BooleanParameter syncEnabled = new BooleanParameter("Sync", false)
@@ -77,9 +73,8 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     private final String instanceId;
     private final Random random = new Random();
     
-    // Wi-Fi interface addresses
-    private InetAddress wifiLocalAddress;
-    private InetAddress wifiBroadcastAddress;
+    // Broadcast addresses across all active, non-loopback IPv4 interfaces (not just Wi-Fi)
+    private final List<InetAddress> broadcastAddresses = new ArrayList<>();
     
     // Per-channel sync state
     private final List<LXChannel> activeSyncChannels = new ArrayList<>();
@@ -136,13 +131,15 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         this.oscEngine = lx.engine.osc;
         
         try {
-            initializeWifiInterface();
+            initializeNetworkInterfaces();
             
             this.discoverySocket = new DatagramSocket(DISCOVERY_PORT);
             this.discoverySocket.setBroadcast(true);
             this.oscReceiver = oscEngine.receiver(SYNC_OSC_PORT);
             this.oscReceiver.addListener(oscListener);
-            this.oscTransmitter = oscEngine.transmitter(wifiBroadcastAddress, SYNC_OSC_PORT);
+            for (InetAddress broadcastAddress : broadcastAddresses) {
+                this.oscTransmitters.add(oscEngine.transmitter(broadcastAddress, SYNC_OSC_PORT));
+            }
             this.oscEngine.addEngineListener(this.engineOscListener);
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize network for sync", e);
@@ -179,53 +176,43 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         return "slstudio-" + System.currentTimeMillis() + "-" + random.nextInt(1000);
     }
     
-    private void initializeWifiInterface() {
+    /**
+     * Discover broadcast addresses on every active, non-loopback IPv4 interface.
+     * Previously we guessed a single "Wi-Fi" interface by name, which silently
+     * fails (both instances never discover each other, both stay MASTER) if the
+     * heuristic picks the wrong adapter (e.g. Ethernet, USB adapter, VPN, etc.)
+     * or if the box has multiple interfaces. Broadcasting on all of them removes
+     * that guesswork.
+     */
+    private void initializeNetworkInterfaces() {
         try {
-            NetworkInterface wifiInterface = findWifiInterface();
-            if (wifiInterface == null) {
-                throw new RuntimeException("Wi-Fi interface not found");
-            }
-            
-            for (InterfaceAddress addr : wifiInterface.getInterfaceAddresses()) {
-                InetAddress address = addr.getAddress();
-                if (address instanceof Inet4Address) {
-                    wifiLocalAddress = address;
-                    wifiBroadcastAddress = addr.getBroadcast();
-                    break;
+            boolean foundAny = false;
+            for (NetworkInterface iface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                if (!iface.isUp() || iface.isLoopback() || iface.isVirtual() || iface.isPointToPoint()) {
+                    continue;
+                }
+                for (InterfaceAddress addr : iface.getInterfaceAddresses()) {
+                    InetAddress address = addr.getAddress();
+                    InetAddress broadcast = addr.getBroadcast();
+                    if (address instanceof Inet4Address && broadcast != null) {
+                        foundAny = true;
+                        broadcastAddresses.add(broadcast);
+                        System.out.println("🛜 SYNC IFACE: Using " + iface.getName() + " (" + iface.getDisplayName() +
+                            ") at " + address.getHostAddress() + " broadcast " + broadcast.getHostAddress());
+                    }
                 }
             }
             
-            if (wifiLocalAddress == null || wifiBroadcastAddress == null) {
-                throw new RuntimeException("No IPv4 address/broadcast found on Wi-Fi interface");
+            if (!foundAny) {
+                throw new RuntimeException("No active IPv4 network interfaces with a broadcast address were found");
             }
             
-            System.out.println("🛜 SYNC WIFI: Using " + wifiInterface.getName() + " (" + wifiInterface.getDisplayName() + 
-                ") at " + wifiLocalAddress.getHostAddress() + " broadcast " + wifiBroadcastAddress.getHostAddress());
+            System.out.println("🛜 SYNC IFACE: Broadcasting sync/discovery on " + broadcastAddresses.size() + " interface(s). " +
+                "If two instances never discover each other, verify they show overlapping subnets above, " +
+                "and check for firewalls/AP client isolation blocking UDP ports " + DISCOVERY_PORT + " and " + SYNC_OSC_PORT + ".");
         } catch (SocketException e) {
-            throw new RuntimeException("Failed to initialize Wi-Fi interface", e);
+            throw new RuntimeException("Failed to enumerate network interfaces", e);
         }
-    }
-    
-    private NetworkInterface findWifiInterface() throws SocketException {
-        // First try to find by display name (e.g., "Wi-Fi", "AirPort")
-        for (NetworkInterface iface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
-            String displayName = iface.getDisplayName();
-            if (displayName != null && (displayName.toLowerCase().contains("wi-fi") || 
-                                        displayName.toLowerCase().contains("airport") ||
-                                        displayName.toLowerCase().contains("wifi"))) {
-                return iface;
-            }
-        }
-        
-        // Fallback to common device names
-        for (String name : WIFI_INTERFACE_FALLBACKS) {
-            NetworkInterface iface = NetworkInterface.getByName(name);
-            if (iface != null && !iface.isLoopback()) {
-                return iface;
-            }
-        }
-        
-        return null;
     }
     
     @Override
@@ -397,9 +384,11 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             );
             
             byte[] data = discoveryMsg.getBytes();
-            DatagramPacket packet = new DatagramPacket(data, data.length, 
-                wifiBroadcastAddress, DISCOVERY_PORT);
-            discoverySocket.send(packet);
+            for (InetAddress broadcastAddress : broadcastAddresses) {
+                DatagramPacket packet = new DatagramPacket(data, data.length, 
+                    broadcastAddress, DISCOVERY_PORT);
+                discoverySocket.send(packet);
+            }
             lastHeartbeatTime = System.currentTimeMillis();
             
             System.out.println("📡 DISCOVERY: Sent heartbeat as " + (isMaster ? "MASTER" : "SLAVE") + 
@@ -529,7 +518,9 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
                 
                 OscMessage message = new OscMessage("/slstudio/sync/initial");
                 message.add(syncMsg);
-                oscTransmitter.send(message);
+                for (LXOscEngine.Transmitter transmitter : oscTransmitters) {
+                    transmitter.send(message);
+                }
                 
                 System.out.println("📡 OSC SYNC: Sent initial sync - channel " + (channel.getIndex() + 1) + " - " + syncMsg);
             }
@@ -578,7 +569,9 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         // Send multiple copies to guard against UDP packet loss
         try {
             for (int i = 0; i < 3; i++) {
-                oscTransmitter.send(message);
+                for (LXOscEngine.Transmitter transmitter : oscTransmitters) {
+                    transmitter.send(message);
+                }
             }
         } catch (IOException e) {
             System.err.println("Failed to send sync message: " + e.getMessage());
@@ -640,11 +633,13 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     }
     
     private void sendSyncEnable(boolean enabled) {
-        if (oscTransmitter == null) return;
+        if (oscTransmitters.isEmpty()) return;
         try {
             OscMessage message = new OscMessage("/slstudio/sync/enable");
             message.add(enabled ? 1 : 0);
-            oscTransmitter.send(message);
+            for (LXOscEngine.Transmitter transmitter : oscTransmitters) {
+                transmitter.send(message);
+            }
             System.out.println("📤 SYNC ENABLE TX: " + (enabled ? "ON" : "OFF"));
         } catch (IOException e) {
             System.err.println("Failed to send sync enable message: " + e.getMessage());
