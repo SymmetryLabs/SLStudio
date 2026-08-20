@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1785969064578,
+  "timestamp": 1787257370961,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -16711767,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 9
+          "focusedChannel": 0
         },
         "channels": [
           {
@@ -4598,7 +4598,7 @@
             },
             "warps": [],
             "effects": [],
-            "patternIndex": 3,
+            "patternIndex": 21,
             "patterns": [
               {
                 "id": 28341,
@@ -7339,7 +7339,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -16711905,
+          "modulationColor": -14418176,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -7420,7 +7420,7 @@
         "modulationColor": -16711858,
         "parameters": {
           "label": "Meter",
-          "running": true,
+          "running": false,
           "trigger": false,
           "gain": 0.0,
           "range": 48.0,
@@ -7497,7 +7497,7 @@
       "DMXParameterMapper": {
         "id": 111,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -16711728,
+        "modulationColor": -15597313,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -8438,13 +8438,13 @@
     "midi": {
       "inputs": [
         {
-          "name": "SPD-SX",
+          "name": "APC40 mkII",
           "channel": true,
           "control": true,
           "sync": true
         },
         {
-          "name": "APC40 mkII",
+          "name": "SPD-SX",
           "channel": true,
           "control": true,
           "sync": true
