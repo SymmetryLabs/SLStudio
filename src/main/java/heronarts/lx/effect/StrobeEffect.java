@@ -47,7 +47,7 @@ public class StrobeEffect extends LXEffect {
         .setDescription("Wave shape of strobing");
 
     public final CompoundParameter frequency = (CompoundParameter)
-        new CompoundParameter("Freq", 1, .05, 10)
+        new CompoundParameter("Freq", 3, 3, 10)
         .setExponent(2)
         .setUnits(LXParameter.Units.HERTZ)
         .setDescription("Frequency of strobing");

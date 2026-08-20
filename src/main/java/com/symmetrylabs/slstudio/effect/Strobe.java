@@ -29,7 +29,7 @@ public class Strobe extends LXEffect {
     public final EnumParameter<Waveshape> mode = new EnumParameter<Waveshape>("Shape", Waveshape.TRI);
 
     public final CompoundParameter frequency = (CompoundParameter)
-        new CompoundParameter("Freq", 1, .05, 10).setUnits(LXParameter.Units.HERTZ);
+        new CompoundParameter("Freq", 3, 1, 10).setUnits(LXParameter.Units.HERTZ);
     public final BooleanParameter black =
         new BooleanParameter("Black", true)
             .setDescription("If false, clears to alpha 0. If true, clears to black with alpha 1.");

@@ -24,8 +24,8 @@ public class Awaken extends SLPattern<SLModel> {
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
     private final DiscreteParameter palette =
         new DiscreteParameter("palette", paletteLibrary.getNames());
-    private final CompoundParameter speedParam =
-        new CompoundParameter("speed", 12, -1000, 1000);
+    private static final float SPEED = 760;
+
     private final CompoundParameter widthParam =
         new CompoundParameter("width", model.rRange / 2, 1, 2 * model.rRange);
     private final BooleanParameter wipeOutParam = new BooleanParameter("wipeOut", true);
@@ -48,7 +48,6 @@ public class Awaken extends SLPattern<SLModel> {
     public Awaken(LX lx) {
         super(lx);
         addParameter(palette);
-        addParameter(speedParam);
         addParameter(widthParam);
         addParameter(wipeOutParam);
         addParameter(refillParam);
@@ -90,7 +89,7 @@ public class Awaken extends SLPattern<SLModel> {
 
         float width = widthParam.getValuef();
         for (Center c : centers) {
-            c.dist += speedParam.getValuef() / 1000f * (float) elapsedMs;
+            c.dist += SPEED / 1000f * (float) elapsedMs;
             if (wipeOutParam.getValueb() && c.dist - width > c.killDist) {
                 c.dying = true;
                 c.dist = 0;

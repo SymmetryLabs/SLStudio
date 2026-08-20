@@ -147,6 +147,8 @@ public class APC40Mk2 extends LXMidiSurface {
     private boolean shiftOn = false;
     private boolean bankOn = true;
 
+    private final boolean[] sceneLaunchOn = new boolean[SCENE_LAUNCH_NUM];
+
     private final Map<LXChannel, ChannelListener> channelListeners = new HashMap<LXChannel, ChannelListener>();
 
     private final DeviceListener deviceListener = new DeviceListener();
@@ -482,6 +484,13 @@ public class APC40Mk2 extends LXMidiSurface {
         }
         sendChannels();
         // sendSwatches();
+        sendSceneLaunchButtons();
+    }
+
+    private void sendSceneLaunchButtons() {
+        for (int i = 0; i < SCENE_LAUNCH_NUM; ++i) {
+            sendNoteOn(LED_MODE_PRIMARY, SCENE_LAUNCH + i, this.sceneLaunchOn[i] ? LED_ON : LED_OFF);
+        }
     }
 
     private void sendChannels() {
@@ -716,6 +725,18 @@ public class APC40Mk2 extends LXMidiSurface {
             break;
         }
 
+        // Scene launch buttons (82-86): toggle their LED on/off each time they're pushed.
+        // On release, re-send the LED state, since the hardware's local button handling
+        // turns the LED off on note-off regardless of what we last told it.
+        if (pitch >= SCENE_LAUNCH && pitch <= SCENE_LAUNCH_MAX) {
+            int index = pitch - SCENE_LAUNCH;
+            if (on) {
+                this.sceneLaunchOn[index] = !this.sceneLaunchOn[index];
+            }
+            sendNoteOn(note.getChannel(), pitch, this.sceneLaunchOn[index] ? LED_ON : LED_OFF);
+            return;
+        }
+
         // On clip button release, re-send the column's LED state in case the
         // hardware's local button handling turned the LED off on note-off.
         if (!on && pitch >= CLIP_LAUNCH && pitch <= CLIP_LAUNCH_MAX) {
@@ -787,13 +808,14 @@ public class APC40Mk2 extends LXMidiSurface {
         // Channel messages
         LXChannel channel = getChannel(note);
         if (channel != null) {
+            if (note.getPitch() == CHANNEL_ACTIVE) {
+                channel.enabled.setValue(on);
+                return;
+            }
             if (!on) {
                 return;
             }
             switch (note.getPitch()) {
-            case CHANNEL_ACTIVE:
-                channel.enabled.toggle();
-                return;
             case CHANNEL_SOLO:
                 channel.cueActive.toggle();
                 return;

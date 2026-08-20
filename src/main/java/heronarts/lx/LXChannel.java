@@ -406,6 +406,21 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             }
         });
 
+        final double[] lastFader = new double[] { this.fader.getValue() };
+
+        this.fader.addListener(p -> {
+            if (this.autoDisable.isOn()) {
+                double newFader = this.fader.getValue();
+                double oldFader = lastFader[0];
+                lastFader[0] = newFader;
+                if (oldFader <= 0 && newFader > 0) {
+                    this.enabled.setValue(true);
+                } else if (newFader <= 0) {
+                    this.enabled.setValue(false);
+                }
+            }
+        });
+
         addParameter("enabled", this.enabled);
         addParameter("cue", this.cueActive);
         addParameter("midiMonitor", this.midiMonitor);
@@ -423,21 +438,14 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         addParameter("editorVisible", this.editorVisible);
         addParameter("patternBlendMode", this.patternBlendMode);
         addParameter("blendPatterns", this.blendPatterns);
+
+        if (this.autoDisable.isOn()) {
+            this.enabled.setValue(this.fader.getValue() > 0);
+        }
     }
 
     boolean shouldRun() {
-//        if (!this.enabled.isOn()) {
-//            return false;
-//        }
-//        return !this.autoDisable.isOn() || this.fader.getValue() != 0;
-        if (this.fader.getValuef() < 0.05){
-            this.enabled.setValue(false);
-            return false;
-        }
-        else {
-            this.enabled.setValue(true);
-            return true;
-        }
+        return this.enabled.isOn();
     }
 
     public String getOscAddress() {

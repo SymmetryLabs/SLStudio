@@ -89,13 +89,15 @@ public class SLStudioLX extends P3LX {
         private boolean performanceMode = false;
 
         private final LX lx;
+        private JsonObject copiedPattern = null;
 
         /**
          * Help text to display when "?" is pressed.  "@" will be replaced with
          * "Cmd" or "Ctrl", as appropriate for the operating system.
          */
         private static final String HELP_TEXT =
-              "@-C           Toggle P3CubeMap debugging\n" +
+              "@-C           Copy selected pattern\n" +
+                "@-Shift-C     Toggle P3CubeMap debugging\n" +
                 "@-D           Delete selected channel, warp, effect, or pattern\n" +
                 "@-F           Toggle frame rate status line\n" +
                 "@-G           Toggle UI geometry\n" +
@@ -105,7 +107,8 @@ public class SLStudioLX extends P3LX {
                 "@-N           New channel\n" +
                 "@-R           Rename channel or pattern\n" +
                 "@-S           Save current project\n" +
-                "@-V           Toggle preview display\n" +
+                "@-V           Paste copied pattern into selected channel\n" +
+                "@-Shift-V     Toggle preview display\n" +
                 "@-X           Toggle axis display\n" +
                 "@-T           Toggle orthographic projection\n" +
                 "@-/           Toggle help caption line\n" +
@@ -191,7 +194,11 @@ public class SLStudioLX extends P3LX {
                     if (keyEvent.isMetaDown() || keyEvent.isControlDown()) {
                         switch (keyCode) {
                             case VK_C:
-                                cubeMapDebug.toggleVisible();
+                                if (keyEvent.isShiftDown()) {
+                                    cubeMapDebug.toggleVisible();
+                                } else {
+                                    copySelectedPattern();
+                                }
                                 break;
                             case VK_F:
                                 framerate.toggleVisible();
@@ -219,7 +226,11 @@ public class SLStudioLX extends P3LX {
                                 lx.ui.preview.ortho.toggle();
                                 break;
                             case VK_V:
-                                lx.ui.preview.toggleVisible();
+                                if (keyEvent.isShiftDown()) {
+                                    lx.ui.preview.toggleVisible();
+                                } else {
+                                    pasteSelectedPattern();
+                                }
                                 break;
                             case VK_X:
                                 axes.toggleVisible();
@@ -714,6 +725,54 @@ public class SLStudioLX extends P3LX {
             int numLines = text.isEmpty() ? 0 : text.split("\n").length;
             captionText.setAnchor(6, -6 - numLines * SLStudio.MONO_FONT.lineHeight);
             warningText.setText(text);
+        }
+
+        private void copySelectedPattern() {
+            if (engine.getFocusedChannel() instanceof LXChannel) {
+                LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();
+                LXPattern focusedPattern = focusedChannel.getFocusedPattern();
+                if (focusedPattern != null) {
+                    JsonObject patternJson = new JsonObject();
+                    focusedPattern.save(lx, patternJson);
+                    patternJson.remove(LXComponent.KEY_ID);
+                    copiedPattern = patternJson;
+                }
+            }
+        }
+
+        private void pasteSelectedPattern() {
+            if (copiedPattern == null) {
+                return;
+            }
+            if (!(engine.getFocusedChannel() instanceof LXChannel)) {
+                return;
+            }
+            LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();
+            String className = copiedPattern.get("class").getAsString();
+            LXPattern newPattern = instantiatePatternForCopy(className);
+            if (newPattern != null) {
+                newPattern.load(lx, copiedPattern);
+                focusedChannel.addPattern(newPattern);
+            }
+        }
+
+        private LXPattern instantiatePatternForCopy(String className) {
+            try {
+                Class<? extends LXPattern> patternClass = Class.forName(className).asSubclass(LXPattern.class);
+                try {
+                    return patternClass.getConstructor(LX.class).newInstance(lx);
+                } catch (NoSuchMethodException nsmx) {
+                    try {
+                        return patternClass.getConstructor(applet.getClass(), LX.class).newInstance(applet, lx);
+                    } catch (NoSuchMethodException nsmx2) {
+                        nsmx2.printStackTrace();
+                    }
+                }
+            } catch (Exception x) {
+                System.err.println("Exception instantiating pattern for copy: " + x.getLocalizedMessage());
+                x.printStackTrace();
+            }
+            return null;
         }
 
         @Override

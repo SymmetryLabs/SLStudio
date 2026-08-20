@@ -202,6 +202,10 @@ public abstract class LXMidiMapping implements LXSerializable {
 
         public final int cc;
 
+        // Accumulated 0-127 state for relative encoders (e.g. APC40 Mk2 Cue Level, CC 47)
+        private int relativeValue;
+        private boolean relativeValueInitialized;
+
         private ControlChange(LX lx, MidiControlChange controlChange, LXParameter parameter) {
             super(lx, controlChange.getChannel(), Type.CONTROL_CHANGE, parameter);
             this.cc = controlChange.getCC();
@@ -226,7 +230,20 @@ public abstract class LXMidiMapping implements LXSerializable {
         @Override
         void apply(LXShortMessage message) {
             MidiControlChange controlChange = (MidiControlChange) message;
-            setNormalized(controlChange.getValue() / 127.);
+            if (this.cc == 47) {
+                if (!this.relativeValueInitialized) {
+                    double normalized = 0.5;
+                    if (this.parameter instanceof LXNormalizedParameter) {
+                        normalized = ((LXNormalizedParameter) this.parameter).getNormalized();
+                    }
+                    this.relativeValue = (int) Math.round(normalized * 127);
+                    this.relativeValueInitialized = true;
+                }
+                this.relativeValue = Math.max(0, Math.min(127, this.relativeValue + controlChange.getRelative()));
+                setNormalized(this.relativeValue / 127.);
+            } else {
+                setNormalized(controlChange.getValue() / 127.);
+            }
         }
 
         @Override
