@@ -10,7 +10,7 @@ import processing.core.PConstants;
 
 /**
  * GROUPS tab tool. Mirrors the universe/strip layout of UIFlashModelingTool
- * but each strip row has 12 toggle boxes that assign the strip to groups 1-12.
+ * but each strip row has 14 toggle boxes that assign the strip to groups 1-14.
  * Group membership is consumed by the GroupStripFilter effect, which blacks
  * out any strip not in the selected group(s).
  *
@@ -36,7 +36,7 @@ public class UIFlashStripGroupTool extends UI2dContainer {
 
         // ── Title ──
         new UILabel(0, 0, w - 10, 16)
-            .setLabel("STRIP GROUPS (12 groups)")
+            .setLabel("STRIP GROUPS (14 groups)")
             .setFont(ui.theme.getLabelFont())
             .setFontColor(ui.theme.getControlTextColor())
             .addToContainer(this);
@@ -80,7 +80,7 @@ public class UIFlashStripGroupTool extends UI2dContainer {
                 .addToContainer(this);
             curY += uHeaderH;
 
-            // Column headers: g1..g12
+            // Column headers: g1..g14
             float hdrX = labelColW + gap;
             for (int g = 0; g < NUM_GROUPS; g++) {
                 new UILabel(hdrX, curY, groupBoxW, colHdrH)
@@ -92,7 +92,7 @@ public class UIFlashStripGroupTool extends UI2dContainer {
             }
             curY += colHdrH;
 
-            // One row per strip: [strip #] [g1] [g2] ... [g12]
+            // One row per strip: [strip #] [g1] [g2] ... [g14]
             for (int s = 0; s < count; s++) {
                 final int stripIndex = globalRow;
 

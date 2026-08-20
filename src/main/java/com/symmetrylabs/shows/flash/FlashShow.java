@@ -52,7 +52,7 @@ public class FlashShow implements Show {
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         UIFlashModelingTool tool = new UIFlashModelingTool(ui, 0, 0, ui.rightPane.model.getContentWidth());
         tool.addToContainer(ui.rightPane.model);
-        // GROUPS tab: assign strips to 12 groups used by the GroupStripFilter effect
+        // GROUPS tab: assign strips to 14 groups used by the GroupStripFilter effect
         com.symmetrylabs.shows.flash.ui.UIFlashStripGroupTool groupTool =
             new com.symmetrylabs.shows.flash.ui.UIFlashStripGroupTool(ui, 0, 0, ui.rightPane.groups.getContentWidth());
         groupTool.addToContainer(ui.rightPane.groups);

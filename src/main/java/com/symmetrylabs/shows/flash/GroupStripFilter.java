@@ -12,7 +12,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 
 /**
- * Filters LED output by strip group. Strips are assigned to up to 12 groups
+ * Filters LED output by strip group. Strips are assigned to up to 14 groups
  * via the GROUPS tab (UIFlashStripGroupTool). When one or more groups are enabled
  * on this effect, only strips belonging to an enabled group light up; all
  * other strips are blacked out. When no groups are enabled, all strips pass
