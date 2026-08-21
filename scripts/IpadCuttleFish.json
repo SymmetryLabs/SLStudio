@@ -247,7 +247,7 @@
             "linkId": "",
             "address": "/slstudio/sync/enable",
             "preArgs": "",
-            "target": "",
+            "target": "127.0.0.1:8002",
             "interaction": true,
             "label": "Network\nSynch",
             "doubleTap": false,
