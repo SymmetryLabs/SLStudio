@@ -68,6 +68,7 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     private boolean syncEnablePending = false;
     private boolean isMaster = false;
     private boolean isConnected = false;
+    private boolean applyingRemoteSyncEnable = false;
     
     // Instance identification
     private final String instanceId;
@@ -219,7 +220,10 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     public void onParameterChanged(LXParameter p) {
         if (p == syncEnabled) {
             boolean enabled = syncEnabled.isOn();
-            if (isMaster && isConnected) {
+            if (!applyingRemoteSyncEnable) {
+                // Broadcast immediately so a press on either machine turns sync on/off on both,
+                // regardless of current master/connected state (which aren't established yet
+                // the very first time the button is pressed).
                 sendSyncEnable(enabled);
             }
             sendEngineSyncEnable(enabled);
@@ -622,7 +626,12 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
             System.out.println("📥 SYNC ENABLE RX: Parsed value " + enabled + " (typeTag: " + typeTag + ")");
             if (syncEnabled.isOn() != enabled) {
                 System.out.println("📥 SYNC ENABLE RX: Setting syncEnabled to " + (enabled ? "ON" : "OFF"));
-                syncEnabled.setValue(enabled);
+                applyingRemoteSyncEnable = true;
+                try {
+                    syncEnabled.setValue(enabled);
+                } finally {
+                    applyingRemoteSyncEnable = false;
+                }
             } else {
                 System.out.println("📥 SYNC ENABLE RX: Already " + (enabled ? "ON" : "OFF") + ", no change");
             }
