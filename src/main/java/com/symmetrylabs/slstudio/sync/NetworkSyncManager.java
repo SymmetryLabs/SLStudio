@@ -42,6 +42,12 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
     public static final int SYNC_HEARTBEAT_INTERVAL_MS = 2000;  // Re-send current pattern every 2 seconds
     public static final int CONNECTION_TIMEOUT_MS = 10000;  // 10 seconds (5x heartbeat for robustness)
     
+    // Hardcoded fallback broadcast address for the known show network subnet.
+    // Always included in addition to whatever is auto-detected from active interfaces,
+    // so sync works even if interface auto-detection picks the wrong adapter.
+    // Override/extend via -Dslstudio.sync.broadcast=ip1,ip2,...
+    private static final String HARDCODED_BROADCAST_ADDRESS = "192.168.8.255";
+    
     private final LX lx;
     private final NetworkMonitor networkMonitor;
     private final LXOscEngine oscEngine;
@@ -184,10 +190,43 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
      * heuristic picks the wrong adapter (e.g. Ethernet, USB adapter, VPN, etc.)
      * or if the box has multiple interfaces. Broadcasting on all of them removes
      * that guesswork.
+     *
+     * Also always includes HARDCODED_BROADCAST_ADDRESS (the known show network subnet)
+     * so sync works without needing a launch flag, and additionally honors the system
+     * property "slstudio.sync.broadcast" as a comma-separated list of extra broadcast
+     * IPs (e.g. -Dslstudio.sync.broadcast=10.0.0.255) for other networks.
      */
     private void initializeNetworkInterfaces() {
+        Set<String> added = new HashSet<>();
+        
         try {
-            boolean foundAny = false;
+            InetAddress hardcoded = InetAddress.getByName(HARDCODED_BROADCAST_ADDRESS);
+            broadcastAddresses.add(hardcoded);
+            added.add(hardcoded.getHostAddress());
+            System.out.println("🛜 SYNC IFACE: Using HARDCODED broadcast " + hardcoded.getHostAddress());
+        } catch (UnknownHostException e) {
+            System.err.println("❌ ERROR: Invalid HARDCODED_BROADCAST_ADDRESS \"" + HARDCODED_BROADCAST_ADDRESS + "\": " + e.getMessage());
+        }
+        
+        String override = System.getProperty("slstudio.sync.broadcast");
+        if (override != null && !override.trim().isEmpty()) {
+            for (String token : override.split(",")) {
+                token = token.trim();
+                if (token.isEmpty()) continue;
+                try {
+                    InetAddress broadcast = InetAddress.getByName(token);
+                    if (added.add(broadcast.getHostAddress())) {
+                        broadcastAddresses.add(broadcast);
+                        System.out.println("🛜 SYNC IFACE: Using EXTRA broadcast " + broadcast.getHostAddress() +
+                            " (from -Dslstudio.sync.broadcast)");
+                    }
+                } catch (UnknownHostException e) {
+                    System.err.println("❌ ERROR: Invalid slstudio.sync.broadcast entry \"" + token + "\": " + e.getMessage());
+                }
+            }
+        }
+        
+        try {
             for (NetworkInterface iface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
                 if (!iface.isUp() || iface.isLoopback() || iface.isVirtual() || iface.isPointToPoint()) {
                     continue;
@@ -195,25 +234,24 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
                 for (InterfaceAddress addr : iface.getInterfaceAddresses()) {
                     InetAddress address = addr.getAddress();
                     InetAddress broadcast = addr.getBroadcast();
-                    if (address instanceof Inet4Address && broadcast != null) {
-                        foundAny = true;
+                    if (address instanceof Inet4Address && broadcast != null && added.add(broadcast.getHostAddress())) {
                         broadcastAddresses.add(broadcast);
                         System.out.println("🛜 SYNC IFACE: Using " + iface.getName() + " (" + iface.getDisplayName() +
                             ") at " + address.getHostAddress() + " broadcast " + broadcast.getHostAddress());
                     }
                 }
             }
-            
-            if (!foundAny) {
-                throw new RuntimeException("No active IPv4 network interfaces with a broadcast address were found");
-            }
-            
-            System.out.println("🛜 SYNC IFACE: Broadcasting sync/discovery on " + broadcastAddresses.size() + " interface(s). " +
-                "If two instances never discover each other, verify they show overlapping subnets above, " +
-                "and check for firewalls/AP client isolation blocking UDP ports " + DISCOVERY_PORT + " and " + SYNC_OSC_PORT + ".");
         } catch (SocketException e) {
-            throw new RuntimeException("Failed to enumerate network interfaces", e);
+            System.err.println("⚠️  WARNING: Failed to enumerate network interfaces: " + e.getMessage());
         }
+        
+        if (broadcastAddresses.isEmpty()) {
+            throw new RuntimeException("No broadcast addresses available (hardcoded address invalid and no active IPv4 interfaces found)");
+        }
+        
+        System.out.println("🛜 SYNC IFACE: Broadcasting sync/discovery on " + broadcastAddresses.size() + " address(es). " +
+            "If two instances never discover each other, verify they show overlapping subnets above, " +
+            "and check for firewalls/AP client isolation blocking UDP ports " + DISCOVERY_PORT + " and " + SYNC_OSC_PORT + ".");
     }
     
     @Override
@@ -819,9 +857,13 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
                 if (message.contains("instanceId") && message.contains("isMaster")) {
                     String instanceId = extractJsonValue(message, "instanceId");
                     boolean isMaster = Boolean.parseBoolean(extractJsonValue(message, "isMaster"));
+                    boolean isSelf = instanceId.equals(this.instanceId);
+                    
+                    System.out.println("📦 RAW PACKET: From " + packet.getAddress().getHostAddress() + ":" + packet.getPort() +
+                        " id=" + instanceId + " isMaster=" + isMaster + (isSelf ? " (SELF-ECHO)" : " (EXTERNAL)"));
                     
                     // Don't process our own packets
-                    if (!instanceId.equals(this.instanceId)) {
+                    if (!isSelf) {
                         onDiscoveryReceived(instanceId, isMaster);
                     }
                 }
