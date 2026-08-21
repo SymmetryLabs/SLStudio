@@ -806,21 +806,28 @@ public class NetworkSyncManager extends LXComponent implements LXParameterListen
         try {
             discoverySocket.setSoTimeout(10); // Non-blocking with short timeout
             byte[] buffer = new byte[1024];
-            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-            discoverySocket.receive(packet);
-            
-            String message = new String(packet.getData(), 0, packet.getLength());
-            if (message.contains("instanceId") && message.contains("isMaster")) {
-                String instanceId = extractJsonValue(message, "instanceId");
-                boolean isMaster = Boolean.parseBoolean(extractJsonValue(message, "isMaster"));
+            // Drain every packet currently queued, not just one. We broadcast heartbeats
+            // on every discovered interface, which causes the OS to loop several
+            // self-echoed copies back to our own listening socket per heartbeat. Reading
+            // only one packet per update() tick let a backlog of self-echoes starve out
+            // (or risk overflowing the OS buffer and dropping) the peer's real packets.
+            for (int i = 0; i < 32; i++) {
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                discoverySocket.receive(packet);
                 
-                // Don't process our own packets
-                if (!instanceId.equals(this.instanceId)) {
-                    onDiscoveryReceived(instanceId, isMaster);
+                String message = new String(packet.getData(), 0, packet.getLength());
+                if (message.contains("instanceId") && message.contains("isMaster")) {
+                    String instanceId = extractJsonValue(message, "instanceId");
+                    boolean isMaster = Boolean.parseBoolean(extractJsonValue(message, "isMaster"));
+                    
+                    // Don't process our own packets
+                    if (!instanceId.equals(this.instanceId)) {
+                        onDiscoveryReceived(instanceId, isMaster);
+                    }
                 }
             }
         } catch (java.net.SocketTimeoutException e) {
-            // Expected timeout for non-blocking behavior
+            // Expected: no more packets queued right now
         } catch (Exception e) {
             // Ignore other errors
         }
