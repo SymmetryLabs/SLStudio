@@ -1,5 +1,5 @@
 {
-  "version": "1.30.3",
+  "version": "1.31.1",
   "type": "session",
   "createdWith": "Open Stage Control",
   "content": {
@@ -684,7 +684,7 @@
             "value": "Speckle",
             "default": "",
             "linkId": "",
-            "address": "/lx/master/effect/9/enabled",
+            "address": "/lx/channel/9/effect/2/enabled",
             "preArgs": "",
             "target": "",
             "interaction": true,
@@ -731,7 +731,7 @@
             "value": "",
             "default": "",
             "linkId": "",
-            "address": "/lx/master/effect/9/Palette",
+            "address": "/lx/channel/9/effect/2/Palette",
             "preArgs": "",
             "typeTags": "",
             "decimals": 2,
@@ -49389,7 +49389,7 @@
                     "value": "",
                     "default": "",
                     "linkId": "",
-                    "address": "/lx/master/effect/9/Palette",
+                    "address": "/lx/channel/9/effect/2/Palette",
                     "preArgs": "",
                     "typeTags": "",
                     "decimals": 2,
