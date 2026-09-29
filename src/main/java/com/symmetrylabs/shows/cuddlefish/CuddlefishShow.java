@@ -43,7 +43,7 @@ public class CuddlefishShow implements Show {
     @Override
     public void setupLx(LX lx) {
         CuddlefishModel model = (CuddlefishModel) lx.model;
-        CuddlefishPixlite pixlite = new CuddlefishPixlite(lx, "192.168.1.50", model);
+        CuddlefishPixlite pixlite = new CuddlefishPixlite(lx, "192.168.1.42", model);
         lx.addOutput(pixlite);
         // Dedicated ADD-blend channel: always runs, adds white on top when a strip is selected
         illumChannel = lx.engine.addChannel();
