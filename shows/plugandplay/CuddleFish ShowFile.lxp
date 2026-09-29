@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "timestamp": 1790722156446,
+  "timestamp": 1790724694833,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -44,7 +44,7 @@
         "modulationColor": -16711767,
         "parameters": {
           "label": "Look-1",
-          "focusedChannel": 8
+          "focusedChannel": 9
         },
         "channels": [
           {
@@ -3229,13 +3229,13 @@
             "modulationColor": -8978688,
             "parameters": {
               "label": "Ipad",
-              "enabled": true,
+              "enabled": false,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": false,
               "autoCycleTimeSecs": 0.1,
-              "fader": 1.0,
+              "fader": 0.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": false,
@@ -5383,13 +5383,13 @@
             "modulationColor": -16743937,
             "parameters": {
               "label": "AutoCycle",
-              "enabled": false,
+              "enabled": true,
               "cue": false,
               "midiMonitor": false,
               "midiChannel": 16,
               "autoCycleEnabled": true,
               "autoCycleTimeSecs": 15.0,
-              "fader": 0.0,
+              "fader": 1.0,
               "crossfadeGroup": 0,
               "blendMode": 0,
               "transitionEnabled": true,
@@ -5431,7 +5431,7 @@
                 }
               }
             ],
-            "patternIndex": 4,
+            "patternIndex": 0,
             "patterns": [
               {
                 "id": 45344,
@@ -7757,7 +7757,7 @@
                   "expandedInUi": true,
                   "Enabled": true,
                   "Cycle": true,
-                  "strip": 185
+                  "strip": -1
                 },
                 "modulation": {
                   "modulators": [],
@@ -8700,7 +8700,7 @@
         "shelf": {
           "id": 32,
           "class": "heronarts.lx.modulator.APC40Mk2Shelf",
-          "modulationColor": -65295,
+          "modulationColor": -13696769,
           "parameters": {
             "label": "APC40Mk2 Shelf",
             "running": false,
@@ -8858,7 +8858,7 @@
       "DMXParameterMapper": {
         "id": 48,
         "class": "com.symmetrylabs.util.dmx.DMXParameterMapper",
-        "modulationColor": -65514,
+        "modulationColor": -14352129,
         "parameters": {
           "label": "DMXParameterMapper"
         },
@@ -10887,10 +10887,10 @@
         "positionX": -925.0648193359375,
         "positionY": 3001.05126953125,
         "positionZ": -204.34671020507812,
-        "orientW": 0.6053395,
-        "orientX": 0.5680642,
-        "orientY": 0.4099954,
-        "orientZ": 0.37785044
+        "orientW": 0.2646285,
+        "orientX": 0.95467937,
+        "orientY": -0.11553678,
+        "orientZ": -0.072182596
       }
     }
   }
