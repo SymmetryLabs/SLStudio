@@ -41,6 +41,7 @@ import static java.lang.Math.*;
 
 public class TraktorPlayNeue extends DPat
 {
+    public static final String GROUP_NAME = "Audio";
     private boolean rhythmOn = false;
     private boolean leapOn = false;
     PVector position = new PVector();

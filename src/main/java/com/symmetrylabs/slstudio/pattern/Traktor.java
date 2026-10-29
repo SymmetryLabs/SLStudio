@@ -10,6 +10,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import com.symmetrylabs.util.MathUtils;
 
 public class Traktor extends LXPattern {
+    public static final String GROUP_NAME = "Audio";
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);

@@ -18,6 +18,7 @@ import com.symmetrylabs.slstudio.model.Strip;
 import heronarts.lx.transform.LXVector;
 
 public class SoundRain extends SLPattern<CubesModel> {
+    public static final String GROUP_NAME = "Audio";
     private LXAudioBuffer audioBuffer;
     private float[] audioSamples;
     private ddf.minim.analysis.FFT fft = null;

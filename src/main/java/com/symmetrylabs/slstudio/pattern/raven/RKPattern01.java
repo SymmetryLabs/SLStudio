@@ -21,6 +21,7 @@ import com.symmetrylabs.slstudio.SLStudio;
 import static com.symmetrylabs.util.NoiseUtils.noise;
 
 public class RKPattern01 extends P3CubeMapPattern {
+    public static final String GROUP_NAME = "Audio";
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);

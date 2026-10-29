@@ -8,6 +8,7 @@ import com.symmetrylabs.shows.tree.TreeModel;
 
 
 public class TreeAudioWaves extends TreeWave {
+    public static final String GROUP_NAME = "Audio";
 
     public final BooleanParameter manual =
         new BooleanParameter("Manual", false)

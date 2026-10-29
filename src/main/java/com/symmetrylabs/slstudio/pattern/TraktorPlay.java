@@ -20,6 +20,7 @@ import static java.lang.Math.*;
 
 public class TraktorPlay extends DPat //implements P3LX.KeyEventHandler
 {
+    public static final String GROUP_NAME = "Audio";
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);
 

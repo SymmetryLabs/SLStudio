@@ -9,6 +9,7 @@ import static com.symmetrylabs.util.MathUtils.*;
 
 
 public class TreeAudioMeter extends TreePattern {
+    public static final String GROUP_NAME = "Audio";
 
 
     public String getAuthor() {

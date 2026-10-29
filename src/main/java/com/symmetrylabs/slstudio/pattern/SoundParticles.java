@@ -29,6 +29,7 @@ import static processing.core.PConstants.PI;
 
 
 public class SoundParticles extends LXPattern {
+    public static final String GROUP_NAME = "Audio";
     private final int LIMINAL_KEY = 46;
     private final int MAX_VELOCITY = 100;
     private boolean debug = false;

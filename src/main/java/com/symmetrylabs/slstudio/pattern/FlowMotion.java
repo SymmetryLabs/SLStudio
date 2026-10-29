@@ -21,6 +21,7 @@ import java.util.List;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 
 public class FlowMotion extends SLPattern<SLModel> {
+    public static final String GROUP_NAME = "Audio";
     private final int STREAM_LENGTH = 100;
     private CompoundParameter gainParam = new CompoundParameter("gain", 4, 0, 10);
     private CompoundParameter floorParam = new CompoundParameter("floor", 12, 1, 64);

@@ -14,6 +14,7 @@ import static heronarts.lx.PolyBuffer.Space.SRGB8;
 import static processing.core.PApplet.constrain;
 
 public class SquareBinEQ extends SLPattern<SLModel> {
+    public static final String GROUP_NAME = "Audio";
 
     private final LXAudioInput audioInput = lx.engine.audio.getInput();
     private final GraphicMeter eq = new GraphicMeter(audioInput);

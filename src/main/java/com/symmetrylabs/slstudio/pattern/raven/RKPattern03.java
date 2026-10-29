@@ -20,6 +20,7 @@ import static com.symmetrylabs.util.NoiseUtils.noise;
 import static com.symmetrylabs.util.MathUtils.random;
 
 public class RKPattern03 extends P3CubeMapPattern {
+    public static final String GROUP_NAME = "Audio";
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);

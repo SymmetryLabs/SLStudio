@@ -12,6 +12,7 @@ import static com.symmetrylabs.util.MathUtils.*;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class BassPod extends LXPattern {
+    public static final String GROUP_NAME = "Audio";
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);

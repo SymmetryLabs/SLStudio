@@ -15,3 +15,4 @@ Use the same `JAVA_HOME` export for `./gradlew compileJava` when only checking c
 - Shows live in `src/main/java/com/symmetrylabs/shows/<name>/` and are registered in `ShowRegistry.java`.
 - Patterns/effects are discovered by classpath scan (`LXClassLoader`), so per-show pattern classes need no manual registration.
 - `cuddlefish`, `flash`, `kaleidoscope` are clones of the same strip-mapping show (modeling tool in `ui/`, mapping persisted to `data/<name>-mapping.json`).
+- Pattern browser groups are driven by a `public static final String GROUP_NAME` field on the pattern class; audio-reactive patterns use `GROUP_NAME = "Audio"`.

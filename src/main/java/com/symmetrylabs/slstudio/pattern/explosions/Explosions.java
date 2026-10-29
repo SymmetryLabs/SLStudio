@@ -20,6 +20,7 @@ import static com.symmetrylabs.util.MathUtils.random;
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 public class Explosions extends LXPattern {
+    public static final String GROUP_NAME = "Audio";
     // Used to store info about each explosion.
     // See com.symmetrylabs.slstudio.pattern.explosions.L8onUtil.pde for the definition.
     private List<L8onExplosion> explosions = new ArrayList<L8onExplosion>();

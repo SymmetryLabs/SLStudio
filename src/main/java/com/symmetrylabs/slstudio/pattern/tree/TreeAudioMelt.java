@@ -12,6 +12,7 @@ import static com.symmetrylabs.util.MathConstants.*;
 
 
 public abstract class TreeAudioMelt extends TreeBuffer {
+    public static final String GROUP_NAME = "Audio";
     public String getAuthor() {
         return "Mark C. Slee";
     }

@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class TreeEq extends TreePattern {
+    public static final String GROUP_NAME = "Audio";
     private double t = 0;
     private final GraphicMeter eq =
         new GraphicMeter(lx.engine.audio.input.mix, model.getBranches().size());

@@ -1,9 +1,14 @@
 package com.symmetrylabs.shows.ysiadsparty;
 
+import java.io.File;
+import java.io.FileReader;
 import java.util.*;
+
+import com.google.gson.Gson;
 
 import com.symmetrylabs.shows.cubes.CubesModel;
 import com.symmetrylabs.shows.cubes.CubesShow;
+import com.symmetrylabs.shows.ysiadsparty.ui.UIShaprImportTool;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 
@@ -55,7 +60,18 @@ public class YsiadsPartyShow extends CubesShow implements Show {
         List<CubesModel.Tower> towers = new ArrayList<>();
         List<CubesModel.Cube> allCubes = new ArrayList<>();
 
-        for (TowerConfig config : TOWER_CONFIG) {
+        List<TowerConfig> configs = new ArrayList<>();
+        ShaprCubeImporter.Cube[] imported = loadImportedCubes();
+        if (imported != null && imported.length > 0) {
+            System.out.println("YsiadsPartyShow: loaded " + imported.length + " cubes from " + UIShaprImportTool.CUBES_JSON);
+            for (ShaprCubeImporter.Cube c : imported) {
+                configs.add(new TowerConfig(c.x, c.y, c.z, 0, c.ry, 0, new String[] {""}));
+            }
+        } else {
+            configs.addAll(Arrays.asList(TOWER_CONFIG));
+        }
+
+        for (TowerConfig config : configs) {
             List<CubesModel.Cube> cubes = new ArrayList<>();
             float x = config.x;
             float z = config.z;
@@ -84,10 +100,25 @@ public class YsiadsPartyShow extends CubesShow implements Show {
         return m;
     }
 
+    /**
+     * Reads data/ysiadsparty-cubes.json written by the Shapr3D import tool,
+     * or returns null when absent/unparseable.
+     */
+    private static ShaprCubeImporter.Cube[] loadImportedCubes() {
+        File f = new File(UIShaprImportTool.CUBES_JSON);
+        if (!f.exists()) return null;
+        try (FileReader reader = new FileReader(f)) {
+            return new Gson().fromJson(reader, ShaprCubeImporter.Cube[].class);
+        } catch (Exception e) {
+            System.err.println("YsiadsPartyShow: failed to load " + UIShaprImportTool.CUBES_JSON + ", using TOWER_CONFIG");
+            return null;
+        }
+    }
+
     public void setupUi(final SLStudioLX lx, SLStudioLX.UI ui) {
         super.setupUi(lx, ui);
-
-
+        new UIShaprImportTool(lx, ui, 0, 0, ui.rightPane.utility.getContentWidth())
+            .addToContainer(ui.rightPane.utility);
     }
 
     @Override

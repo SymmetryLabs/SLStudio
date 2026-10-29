@@ -16,6 +16,7 @@ import static processing.core.PApplet.*;
 
 
 public class CubeEQ extends SLPattern<SLModel> {
+    public static final String GROUP_NAME = "Audio";
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);
